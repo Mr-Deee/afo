@@ -1,32 +1,77 @@
 "use client";
 
-
-import Image from "next/image";
+import { useEffect, useState } from "react";
+import { ref, onValue } from "firebase/database";
+import { useRouter } from "next/navigation"; 
+import { motion, AnimatePresence } from "framer-motion";
+import { db } from "@/firebase";
 import styles from "./Home.module.css";
-import { useState } from "react";
-import { useRouter } from "next/navigation"; // ✅ Correct hook for navigation
 
+type Tribute = {
+  id: string;
+  name: string;
+  relation: string;
+  message: string;
+  createdAt: number;
+};
 
 export default function LandingPage() {
-
   const router = useRouter();
 
   const navLinks = [
     { href: "#services", label: "Memories" },
     { href: "#work", label: "Work" },
     { href: "#about", label: "About" },
-
   ];
-  const [showForm, setShowForm] = useState(false);
+
+  const gototribute = () => {
+    router.push("/tributeform");
+  };
 
   const services = [
     { title: "Program Outline", desc: "." },
     { title: "BioGraphy", desc: "" },
-    { title: "location", desc: "." },
+    { title: "Location", desc: "." },
   ];
 
-  const workItems = ["space", "nova", "sonic", "solar"];
-          <button className={styles.outlineButton}>Add A Tribute</button>
+  const [tributes, setTributes] = useState<Tribute[]>([]);
+  const [index, setIndex] = useState(0);
+
+  useEffect(() => {
+    const tributeRef = ref(db, "tributes");
+
+    const unsubscribe = onValue(tributeRef, (snapshot) => {
+      const data = snapshot.val();
+      if (data) {
+        const loadedTributes: Tribute[] = Object.entries(data).map(
+          ([id, value]: [string, any]) => ({
+            id,
+            name: value.name,
+            relation: value.relation,
+            message: value.message,
+            createdAt: value.createdAt,
+          })
+        );
+
+        // sort newest first
+        loadedTributes.sort((a, b) => b.createdAt - a.createdAt);
+        setTributes(loadedTributes);
+      }
+    });
+
+    return () => unsubscribe();
+  }, []);
+
+  // Auto-change slides every 6 seconds
+  useEffect(() => {
+    if (tributes.length === 0) return;
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % tributes.length);
+    }, 6000);
+    return () => clearInterval(timer);
+  }, [tributes]);
+
+  const currentTribute = tributes[index];
 
   return (
     <main className={styles.main}>
@@ -40,7 +85,7 @@ export default function LandingPage() {
             </a>
           ))}
         </nav>
-        <button className={styles.primaryButton} aria-label="Contact Me">
+        <button className={styles.primaryButton} aria-label="Donate">
           Donate
         </button>
       </header>
@@ -49,20 +94,17 @@ export default function LandingPage() {
       <section className={styles.hero}>
         <div className={`${styles.heroContent} ${styles.fadeInUp}`}>
           <h2 className={styles.heroTitle}>
-           <span>  OBED JERON DONKOR</span>
+            <span>OBED JERON DONKOR</span>
           </h2>
           <p className={styles.heroText}>
             28.SEP.1998 - 04.AUG.2025.
           </p>
+
+          {/* Tribute button now sits directly below the date */}
+          <button className={styles.outlineButton} onClick={gototribute}>
+            Add A Tribute
+          </button>
         </div>
-
-
-<button
-      className={styles.outlineButton}
-      onClick={() => router.push("/tributeform")}
-    >
-      Add A Tribute
-    </button>
       </section>
 
       {/* Services */}
@@ -78,28 +120,46 @@ export default function LandingPage() {
         ))}
       </section>
 
-      {/* Selected Work */}
+      {/* Tributes (Slideshow) */}
       <section id="work" className={styles.work}>
         <h2>
-           <span>Memories</span>
+          <span>Tributes</span>
         </h2>
-        <div className={styles.workGrid}>
-          {workItems.map((item) => (
-            <div key={item} className={`${styles.workItem} ${styles.hoverScale}`}>
-              <Image
-                src={`/images/${item}.jpg`}
-                alt={`${item} project preview`}
-                width={600}
-                height={400}
-                className={styles.workImage}
-                priority={item === "space"} // optional: prioritize first image
-              />
-              <div className={styles.workLabel}>
-                {item.charAt(0).toUpperCase() + item.slice(1)}
-              </div>
-            </div>
-          ))}
-        </div>
+
+        {tributes.length === 0 ? (
+          <div className={styles.card}>No tributes yet 💐</div>
+        ) : (
+          <div className={styles.container}>
+            <AnimatePresence mode="wait">
+              <motion.div
+                key={currentTribute.id}
+                className={styles.card}
+                initial={{ opacity: 0, y: 40, scale: 0.95 }}
+                animate={{ opacity: 1, y: 0, scale: 1 }}
+                exit={{ opacity: 0, y: -40, scale: 0.95 }}
+                transition={{ duration: 0.7, ease: "easeInOut" }}
+              >
+                {/* Tribute image placeholder */}
+                <div className={styles.imageWrapper}>
+                  <img
+                    src="/tribute-placeholder.jpg"
+                    alt="Tribute"
+                    className={styles.image}
+                  />
+                </div>
+
+                {/* Tribute details */}
+                <div className={styles.text}>
+                  <h2 className={styles.name}>{currentTribute.name}</h2>
+                  <p className={styles.relation}>{currentTribute.relation}</p>
+                  <p className={styles.message}>
+                    "{currentTribute.message}"
+                  </p>
+                </div>
+              </motion.div>
+            </AnimatePresence>
+          </div>
+        )}
       </section>
 
       {/* Footer */}

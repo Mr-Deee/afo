@@ -105,8 +105,8 @@
   margin-top: 32px;
   padding: 12px 20px;
   border: 1px solid #666;
-  background: transparent;
-  color: #ccc;
+  background: rgb(245, 188, 2);
+  color: #000000;
   border-radius: 12px;
   cursor: pointer;
   transition: all 0.3s ease;
