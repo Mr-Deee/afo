@@ -43,8 +43,8 @@ export default function LandingPage() {
     const unsubscribe = onValue(tributeRef, (snapshot) => {
       const data = snapshot.val();
       if (data) {
-        const loadedTributes: Tribute[] = Object.entries(data).map(
-          ([id, value]: [string, any]) => ({
+        const loadedTributes: Tribute[] = Object.entries(data as Record<string, Tribute>).map(
+          ([id, value]) => ({
             id,
             name: value.name,
             relation: value.relation,
@@ -52,6 +52,7 @@ export default function LandingPage() {
             createdAt: value.createdAt,
           })
         );
+        
 
         // sort newest first
         loadedTributes.sort((a, b) => b.createdAt - a.createdAt);
@@ -153,7 +154,7 @@ export default function LandingPage() {
                   <h2 className={styles.name}>{currentTribute.name}</h2>
                   <p className={styles.relation}>{currentTribute.relation}</p>
                   <p className={styles.message}>
-                    "{currentTribute.message}"
+                    &quot;{currentTribute.message}&quot;
                   </p>
                 </div>
               </motion.div>
