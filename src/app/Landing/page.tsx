@@ -141,11 +141,11 @@ export default function LandingPage() {
               >
                 {/* Tribute image placeholder */}
                 <div className={styles.imageWrapper}>
-                  <img
+                  {/* <img
                     src="/tribute-placeholder.jpg"
                     alt="Tribute"
                     className={styles.image}
-                  />
+                  /> */}
                 </div>
 
                 {/* Tribute details */}
