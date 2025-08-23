@@ -1,13 +1,23 @@
+"use client";
+
+
 import Image from "next/image";
 import styles from "./Home.module.css";
+import { useState } from "react";
+import { useRouter } from "next/navigation"; // ✅ Correct hook for navigation
+
 
 export default function LandingPage() {
+
+  const router = useRouter();
+
   const navLinks = [
     { href: "#services", label: "Memories" },
     { href: "#work", label: "Work" },
     { href: "#about", label: "About" },
 
   ];
+  const [showForm, setShowForm] = useState(false);
 
   const services = [
     { title: "Program Outline", desc: "." },
@@ -16,6 +26,7 @@ export default function LandingPage() {
   ];
 
   const workItems = ["space", "nova", "sonic", "solar"];
+          <button className={styles.outlineButton}>Add A Tribute</button>
 
   return (
     <main className={styles.main}>
@@ -43,8 +54,15 @@ export default function LandingPage() {
           <p className={styles.heroText}>
             28.SEP.1998 - 04.AUG.2025.
           </p>
-          <button className={styles.outlineButton}>My Services</button>
         </div>
+
+
+<button
+      className={styles.outlineButton}
+      onClick={() => router.push("/tributeform")}
+    >
+      Add A Tribute
+    </button>
       </section>
 
       {/* Services */}
