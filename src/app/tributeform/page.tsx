@@ -28,7 +28,7 @@ export default function TributeForm() {
       setRelation("");
       setMessage("");
 
-      alert("Tribute submitted successfully. Thank You 💐");
+      alert("Tribute submitted successfully.💐");
     } catch (error) {
       console.error("Error saving tribute:", error);
       alert("Something went wrong. Please try again.");
