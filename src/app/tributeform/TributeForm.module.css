@@ -1,12 +1,12 @@
 /* Page container with collage background + zoom animation */
 .container {
-  min-height: 100vh;
+  min-height: 130vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 12rem;
 
-  background: url("/images/col.png") center/cover no-repeat;
+  background: url("/images/ROK2.jpg") 10% 20%/cover no-repeat;
   position: relative;
   animation: kenburns 40s ease-in-out infinite alternate;
 }
@@ -57,9 +57,12 @@
 
 /* Glassmorphism tribute card */
 .card {
+  margin-top: 150px; /* adjust value */
+
+
   position: relative;
   z-index: 2;
-  max-width: 500px;
+  max-width: 600px;
   width: 100%;
   padding: 2rem;
   border-radius: 1.5rem;
