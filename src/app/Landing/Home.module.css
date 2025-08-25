@@ -52,19 +52,18 @@
   background: #f59e0b;
 }
 
-/* Hero */
 .hero {
-  position: relative; /* fix overlay issue */
-  margin-top: 64px;
+  position: relative;
+  margin-top: 24px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  min-height: 50vh; /* full screen hero */
+  min-height: 69vh; /* controls how much of the image shows */
   padding: 0 20px;
 
-  background: url("/images/hero-bg.jpg") center/cover no-repeat;
+  background: url("/images/ROK1.jpg") center center/cover no-repeat;
   border-radius: 0 0 32px 32px;
   overflow: hidden;
 }

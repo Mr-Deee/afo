@@ -20,8 +20,8 @@ export default function LandingPage() {
 
   const navLinks = [
     { href: "#services", label: "Memories" },
-    { href: "#work", label: "Work" },
-    { href: "#about", label: "About" },
+    { href: "#work", label: "Tributes" },
+    { href: "#about", label: "" },
   ];
 
   const gototribute = () => {

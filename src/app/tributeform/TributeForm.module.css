@@ -6,7 +6,7 @@
   align-items: center;
   padding: 2rem;
 
-  background: url("/collage.jpg") center/cover no-repeat;
+  background: url("/images/col.png") center/cover no-repeat;
   position: relative;
   animation: kenburns 40s ease-in-out infinite alternate;
 }
@@ -27,8 +27,8 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(3px);
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(1px);
   z-index: 0;
 }
 
@@ -63,8 +63,8 @@
   width: 100%;
   padding: 2rem;
   border-radius: 1.5rem;
-  background: rgba(255, 255, 255, 0.15);
-  backdrop-filter: blur(12px);
+  background: rgba(7, 0, 0, 0.72);
+  backdrop-filter: blur(1px);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   text-align: center;
   animation: floaty 6s ease-in-out infinite;
