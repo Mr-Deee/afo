@@ -11,6 +11,7 @@
   }
   
   .container {
+    width: 100%;
     max-width: 900px;
     background: rgba(255, 255, 255, 0.95); /* semi-transparent for realism */
     padding: 2.5rem;
@@ -46,7 +47,7 @@
     text-align: justify;
     white-space: pre-line;
   
-    /* 📄 newspaper columns */
+    /* 📄 default newspaper columns */
     column-count: 2;
     column-gap: 2rem;
     column-rule: 1px solid #ddd;
@@ -60,5 +61,62 @@
   @keyframes fade-in {
     from { opacity: 0; transform: translateY(20px); }
     to { opacity: 1; transform: translateY(0); }
+  }
+  
+  /* 📱 Small devices (phones) */
+  @media (max-width: 600px) {
+    .container {
+      padding: 1.5rem;
+      border-radius: 0.5rem;
+    }
+  
+    .title {
+      font-size: 1.8rem;
+    }
+  
+    .text {
+      font-size: 1rem;
+      column-count: 1;  /* single column for readability */
+    }
+  }
+  
+  /* 📲 Medium devices (tablets) */
+  @media (min-width: 601px) and (max-width: 1024px) {
+    .container {
+      padding: 2rem;
+    }
+  
+    .title {
+      font-size: 2.2rem;
+    }
+  
+    .text {
+      font-size: 1.05rem;
+      column-count: 2;
+    }
+  }
+  
+  /* 💻 Large screens (desktop) */
+  @media (min-width: 1025px) {
+    .title {
+      font-size: 2.5rem;
+    }
+  
+    .text {
+      font-size: 1.1rem;
+      column-count: 2;
+    }
+  }
+  
+  /* 🖥️ Extra-large monitors (big desktops, 1400px+) */
+  @media (min-width: 1400px) {
+    .container {
+      max-width: 1200px;
+    }
+  
+    .text {
+      font-size: 1.2rem;
+      column-count: 3; /* add a 3rd column for newspaper effect */
+    }
   }
   
