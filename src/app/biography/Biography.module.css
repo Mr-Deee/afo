@@ -1,0 +1,64 @@
+.main {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    padding: 4rem 1rem;
+  
+    /* newspaper-like background */
+    background: url("/images/ROK1.jpg") no-repeat center center fixed;
+    background-size: cover;
+  }
+  
+  .container {
+    max-width: 900px;
+    background: rgba(255, 255, 255, 0.95); /* semi-transparent for realism */
+    padding: 2.5rem;
+    border-radius: 1rem;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+  
+    /* slight paper-like texture */
+    backdrop-filter: blur(2px);
+  }
+  
+  .title {
+    font-size: 2.5rem;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 2rem;
+    color: #b71c1c;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+  
+    /* headline animation */
+    animation: headline-pop 1s ease-in-out;
+  }
+  
+  @keyframes headline-pop {
+    0% { transform: scale(0.8); opacity: 0; }
+    100% { transform: scale(1); opacity: 1; }
+  }
+  
+  .text {
+    font-size: 1.1rem;
+    line-height: 1.9;
+    color: #111;
+    text-align: justify;
+    white-space: pre-line;
+  
+    /* 📄 newspaper columns */
+    column-count: 2;
+    column-gap: 2rem;
+    column-rule: 1px solid #ddd;
+  
+    /* fade-in effect */
+    opacity: 0;
+    animation: fade-in 1.5s ease forwards;
+    animation-delay: 0.3s;
+  }
+  
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  

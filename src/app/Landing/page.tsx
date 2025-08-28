@@ -95,7 +95,7 @@ export default function LandingPage() {
       <section className={styles.hero}>
         <div className={`${styles.heroContent} ${styles.fadeInUp}`}>
           <h2 className={styles.heroTitle}>
-            <span>OBED JERON DONKOR</span>
+            <span>OBED JERON-DONKOR</span>
           </h2>
           <p className={styles.heroText}>
             28.SEP.1998 - 04.AUG.2025.
@@ -110,15 +110,18 @@ export default function LandingPage() {
 
       {/* Services */}
       <section id="services" className={styles.services}>
-        {services.map(({ title, desc }) => (
-          <div key={title} className={styles.card}>
-            <h3>{title}</h3>
-            <p>{desc}</p>
-            <a href="#" aria-label={`Learn more about ${title}`}>
-              Learn More →
-            </a>
-          </div>
-        ))}
+      {services.map(({ title, desc }) => (
+    <div
+      key={title}
+      className={styles.card}
+      onClick={() => title === "BioGraphy" && router.push("/biography")}
+      style={{ cursor: "pointer" }}
+    >
+      <h3>{title}</h3>
+      <p>{desc}</p>
+      <a aria-label={`Learn more about ${title}`}>Learn More →</a>
+    </div>
+  ))}
       </section>
 
       {/* Tributes (Slideshow) */}
