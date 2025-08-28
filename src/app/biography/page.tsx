@@ -9,7 +9,7 @@ export default function BiographyPage() {
 
   useEffect(() => {
     async function fetchBio() {
-      const res = await fetch("/Biography.docx");
+      const res = await fetch("/biography.txt");
       const blob = await res.blob();
       const arrayBuffer = await blob.arrayBuffer();
 
