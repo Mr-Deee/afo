@@ -1,13 +1,15 @@
 /* Page container with collage background + zoom animation */
 .container {
-  min-height: 130vh;
+  min-height: 0vh; /* fill screen height */
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 12rem;
-  background: url("/images/ROK2.jpg") center/cover no-repeat;
+  padding: 60; /* keep clean, remove huge padding */
+  background: url("/images/ROK51.png") center/contain no-repeat;
+  /* background-attachment: fixed; keeps it crisp on scroll */
+
   position: relative;
-  animation: kenburns 40s ease-in-out infinite alternate;
+  animation: kenburns 70s ease-in-out infinite alternate;
 }
 
 @keyframes kenburns {
@@ -21,17 +23,9 @@
   }
 }
 
-/* Dark overlay */
-.container::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: rgba(0, 0, 0, 0);
-  backdrop-filter: blur(1px);
-  z-index: 0;
-}
 
-/* Glow overlay */
+
+/* Glow overlay
 .container::after {
   content: "";
   position: absolute;
@@ -43,7 +37,7 @@
   );
   animation: glow 12s ease-in-out infinite alternate;
   z-index: 1;
-}
+} */
 
 @keyframes glow {
   0% { transform: translate(-10%, -10%) scale(1); }
@@ -52,7 +46,7 @@
 
 /* Glassmorphism tribute card */
 .card {
-  margin-top: 150px;
+  margin-top: 110px;
   position: relative;
   z-index: 2;
   max-width: 600px;
