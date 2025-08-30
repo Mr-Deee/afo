@@ -15,6 +15,23 @@ type Tribute = {
   createdAt: number;
 };
 
+
+
+
+type Memory = {
+  src: string;
+  caption?: string;
+};
+
+const memories: Memory[] = [
+  { src: "/images/memory1.jpg", caption: "" },
+  { src: "/images/memory2.jpg", caption: "" },
+  { src: "/images/memory3.jpg", caption: "" },
+  { src: "/images/memory4.jpg", caption: "" },
+  { src: "/images/memory5.jpg", caption: "" },
+  { src: "/images/memory6.jpg", caption: "" },
+  // ... add all 50 here, or fetch from Firebase later
+];
 export default function LandingPage() {
   const router = useRouter();
 
@@ -37,6 +54,31 @@ export default function LandingPage() {
   const [tributes, setTributes] = useState<Tribute[]>([]);
   const [index, setIndex] = useState(0);
 
+  const [isOpen, setIsOpen] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isPlaying, setIsPlaying] = useState(false);
+
+  const openSlideshow = (index: number) => {
+    setCurrentIndex(index);
+    setIsOpen(true);
+  };
+
+  const closeSlideshow = () => {
+    setIsOpen(false);
+    setIsPlaying(false);
+  };
+
+  const nextImage = () => setCurrentIndex((prev) => (prev + 1) % memories.length);
+  const prevImage = () => setCurrentIndex((prev) => (prev - 1 + memories.length) % memories.length);
+
+  // Auto-play effect
+  useEffect(() => {
+    if (!isPlaying) return;
+    const timer = setInterval(() => {
+      nextImage();
+    }, 4000); // 4 seconds per slide
+    return () => clearInterval(timer);
+  }, [isPlaying]);
   useEffect(() => {
     const tributeRef = ref(db, "tributes");
 
@@ -166,9 +208,83 @@ export default function LandingPage() {
         )}
       </section>
 
+
+
+      <section id="memories" className={styles.memories}>
+      <div className={styles.headerRow}>
+        <h2>
+          <span>Memories</span>
+        </h2>
+        <button className={styles.outlineButton} onClick={() => openSlideshow(0)}>
+          View All Memories →
+        </button>
+      </div>
+
+      {/* Preview Grid (first 6) */}
+      <div className={styles.memoriesGrid}>
+        {memories.slice(0, 6).map((memory, index) => (
+          <div
+            key={index}
+            className={styles.memoryCard}
+            onClick={() => openSlideshow(index)}
+            style={{ cursor: "pointer" }}
+          >
+            <img src={memory.src} alt={`Memory ${index + 1}`} className={styles.memoryImage} />
+            {memory.caption && <p className={styles.memoryCaption}>{memory.caption}</p>}
+          </div>
+        ))}
+      </div>
+
+
+      
+      {/* Fullscreen Slideshow/Dialog */}
+      <AnimatePresence>
+        {isOpen && (
+          <motion.div
+            className={styles.dialogOverlay}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+          >
+            <div className={styles.dialogContent}>
+              <button className={styles.closeButton} onClick={closeSlideshow}>
+                ✕
+              </button>
+
+              <button className={styles.prevButton} onClick={prevImage}>
+                ‹
+              </button>
+
+              <div className={styles.dialogInner}>
+                <img
+                  src={memories[currentIndex].src}
+                  alt={`Memory ${currentIndex + 1}`}
+                  className={styles.dialogImage}
+                />
+                {memories[currentIndex].caption && (
+                  <p className={styles.dialogCaption}>{memories[currentIndex].caption}</p>
+                )}
+              </div>
+
+              <button className={styles.nextButton} onClick={nextImage}>
+                ›
+              </button>
+
+              <button
+                className={styles.playButton}
+                onClick={() => setIsPlaying((prev) => !prev)}
+              >
+                {isPlaying ? "⏸ Pause" : "▶ Play"}
+              </button>
+            </div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+
+      </section>
       {/* Footer */}
       <footer className={styles.footer}>
-        © {new Date().getFullYear()} OBED JERON. All rights reserved.
+        © {new Date().getFullYear()} OBED JERON-DONKOR. All rights reserved.
       </footer>
     </main>
   );
