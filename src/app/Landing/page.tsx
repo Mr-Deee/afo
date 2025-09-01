@@ -30,6 +30,26 @@ const memories: Memory[] = [
   { src: "/images/memory4.jpg", caption: "" },
   { src: "/images/memory5.jpg", caption: "" },
   { src: "/images/memory6.jpg", caption: "" },
+  { src: "/images/drum1.jpg", caption: "" },
+  { src: "/images/Drum2.jpg", caption: "" },
+  { src: "/images/Drum2.jpg", caption: "" },
+  { src: "/images/ROK8.jpg", caption: "" },
+  { src: "/images/Aunt.jpg", caption: "" },
+  { src: "/images/Bro1.jpg", caption: "" },
+  { src: "/images/Bro2.jpg", caption: "" },
+  { src: "/images/Bro3.jpg", caption: "" },
+  { src: "/images/DAD1.jpg", caption: "" },
+  { src: "/images/DAD2.jpg", caption: "" },
+  { src: "/images/DAD3.jpg", caption: "" },
+  { src: "/images/EMI.jpg", caption: "" },
+  { src: "/images/EMI2.jpg", caption: "" },
+  { src: "/images/emi3.jpg", caption: "" },
+  { src: "/images/ENOS1.jpg", caption: "" },
+  { src: "/images/ENOS2.jpg", caption: "" },
+  { src: "/images/ENOS3.jpg", caption: "" },
+  { src: "/images/FAM1.jpg", caption: "" },
+  { src: "/images/FAM2.jpg", caption: "" },
+  { src: "/images/FAM3.jpg", caption: "" },
   // ... add all 50 here, or fetch from Firebase later
 ];
 export default function LandingPage() {
@@ -46,7 +66,7 @@ export default function LandingPage() {
   };
 
   const services = [
-    { title: "Program Outline", desc: "." },
+    { title: "Program Outline", desc: ".", pdf: "/pdfs/PO.pdf" },
     { title: "BioGraphy", desc: "" },
     { title: "Location", desc: "." },
   ];
@@ -152,19 +172,26 @@ export default function LandingPage() {
 
       {/* Services */}
       <section id="services" className={styles.services}>
-      {services.map(({ title, desc }) => (
+  {services.map(({ title, desc, pdf }) => (
     <div
       key={title}
       className={styles.card}
-      onClick={() => title === "BioGraphy" && router.push("/biography")}
+      onClick={() => {
+        if (title === "BioGraphy") {
+          router.push("/biography");
+        } else if (pdf) {
+          router.push(`/pdfviewer?file=${pdf}`);
+        }
+      }}
       style={{ cursor: "pointer" }}
     >
       <h3>{title}</h3>
       <p>{desc}</p>
-      <a aria-label={`Learn more about ${title}`}>Learn More →</a>
+      <a aria-label={`Learn more about ${title}`}>View</a>
     </div>
   ))}
-      </section>
+</section>
+
 
       {/* Tributes (Slideshow) */}
       <section id="work" className={styles.work}>
