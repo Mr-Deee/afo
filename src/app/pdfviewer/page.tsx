@@ -1,8 +1,10 @@
+// app/pdfviewer/page.tsx
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function PdfViewerPage() {
+function PdfViewerContent() {
   const searchParams = useSearchParams();
   const file = searchParams.get("file");
 
@@ -21,5 +23,13 @@ export default function PdfViewerPage() {
         }}
       />
     </div>
+  );
+}
+
+export default function PdfViewerPage() {
+  return (
+    <Suspense fallback={<p style={{ textAlign: "center", padding: "2rem" }}>Loading PDF...</p>}>
+      <PdfViewerContent />
+    </Suspense>
   );
 }
