@@ -39,4 +39,18 @@ a {
   html {
     color-scheme: dark;
   }
+
+
+  /* app/globals.css */
+
+.react-pdf__Page {
+  display: flex;
+  justify-content: center;
+}
+
+.react-pdf__Page canvas {
+  max-width: 100% !important;
+  height: auto !important;
+}
+
 }
