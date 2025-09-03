@@ -1,0 +1,93 @@
+/* Full-bleed, responsive container that respects mobile browser UI + safe areas */
+
+
+.pdfContainer {
+  height: 100dvh; /* use dynamic viewport height, better for mobile */
+  width: 100%;
+  background: radial-gradient(circle at 20% 20%, rgba(0, 0, 0, 0.05), transparent 40%),
+              radial-gradient(circle at 80% 0%, rgba(0, 0, 0, 0.03), transparent 45%),
+              #f4f6f800;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow: hidden;
+}
+
+.pdfFrame {
+  width: 100%;
+  height: 100%;
+  border: none;
+  display: block;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Mobile tweaks */
+@media (max-width: 640px) {
+  .pdfContainer {
+    padding: calc(env(safe-area-inset-top) + 8px)
+             calc(env(safe-area-inset-right) + 8px)
+             calc(env(safe-area-inset-bottom) + 8px)
+             calc(env(safe-area-inset-left) + 8px);
+  }
+
+  .pdfFrame {
+    border-radius: 12px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  }
+}
+
+
+
+
+
+
+.pdfContainer {
+  /* Use dynamic viewport height to avoid the mobile URL bar jump */
+  height: 100dvh;
+  width: 100%;
+  /* Nice subtle background so the white PDF edges aren’t floating */
+  background: radial-gradient(circle at 20% 20%, rgba(0,0,0,0.06), transparent 40%),
+              radial-gradient(circle at 80% 0%, rgba(0,0,0,0.04), transparent 45%),
+              #f4f6f8;
+  padding: env(safe-area-inset-top) env(safe-area-inset-right)
+           env(safe-area-inset-bottom) env(safe-area-inset-left);
+  overflow: hidden;
+}
+
+.pdfFrame {
+  width: 100%;
+  height: 100%;
+  border: 0;
+  display: block;
+  /* Prevent accidental text selection inside embedded viewers on mobile */
+  -webkit-user-select: none;
+  user-select: none;
+  /* Smoother scrolling in iOS */
+  -webkit-overflow-scrolling: touch;
+}
+
+/* Small screens: allow a little breathing room around the frame */
+@media (max-width: 640px) {
+  .pdfContainer {
+    padding: calc(env(safe-area-inset-top) + 8px)
+             calc(env(safe-area-inset-right) + 8px)
+             calc(env(safe-area-inset-bottom) + 8px)
+             calc(env(safe-area-inset-left) + 8px);
+  }
+  .pdfFrame {
+    border-radius: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  }
+}
+
+/* Landscape phones/tablets: keep it neat */
+@media (orientation: landscape) and (max-height: 500px) {
+  .pdfContainer {
+    padding: 0;
+  }
+  .pdfFrame {
+    border-radius: 0;
+    box-shadow: none;
+  }
+}

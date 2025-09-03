@@ -1,57 +1,44 @@
 "use client";
 
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 
-export default function PdfViewerPage() {
+function PdfViewerInner() {
   const searchParams = useSearchParams();
   const file = searchParams.get("file");
 
   if (!file) {
     return (
-      <p
-        style={{
-          textAlign: "center",
-          padding: "2rem",
-          fontSize: "1rem",
-          color: "#666",
-        }}
-      >
+      <p style={{ textAlign: "center", padding: "2rem" }}>
         No PDF selected
       </p>
     );
   }
 
-  // ✅ Force fit-to-width by default
-  const pdfSrc = file.includes("#") ? file : `${file}#view=fitH`;
-
   return (
-    <div
-      style={{
-        display: "flex",
-        flexDirection: "column",
-        height: "100dvh", // better for mobile than 100vh
-        width: "100%",
-        backgroundColor: "#f4f4f4",
-      }}
-    >
-      <div
+    <div style={{ height: "100vh", width: "100%" }}>
+      <iframe
+        src={file}
         style={{
-          flexGrow: 1,
           width: "100%",
           height: "100%",
-          overflow: "hidden",
+          border: "none",
         }}
-      >
-        <iframe
-          src={pdfSrc}
-          style={{
-            width: "100%",
-            height: "100%",
-            border: "none",
-          }}
-          title="PDF Viewer"
-        />
-      </div>
+      />
     </div>
+  );
+}
+
+export default function PdfViewerPage() {
+  return (
+    <Suspense
+      fallback={
+        <p style={{ textAlign: "center", padding: "2rem" }}>
+          Loading PDF…
+        </p>
+      }
+    >
+      <PdfViewerInner />
+    </Suspense>
   );
 }
