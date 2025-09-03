@@ -13,6 +13,7 @@ export default function PdfViewerPage() {
           textAlign: "center",
           padding: "2rem",
           fontSize: "1rem",
+          color: "#666",
         }}
       >
         No PDF selected
@@ -20,7 +21,7 @@ export default function PdfViewerPage() {
     );
   }
 
-  // ✅ Add fit-to-width param to PDF
+  // ✅ Force fit-to-width by default
   const pdfSrc = file.includes("#") ? file : `${file}#view=fitH`;
 
   return (
@@ -28,9 +29,9 @@ export default function PdfViewerPage() {
       style={{
         display: "flex",
         flexDirection: "column",
-        height: "100dvh",
+        height: "100dvh", // better for mobile than 100vh
         width: "100%",
-        backgroundColor: "#f9f9f9",
+        backgroundColor: "#f4f4f4",
       }}
     >
       <div
@@ -38,8 +39,7 @@ export default function PdfViewerPage() {
           flexGrow: 1,
           width: "100%",
           height: "100%",
-          overflow: "auto", // allow scrolling if needed
-          WebkitOverflowScrolling: "touch",
+          overflow: "hidden",
         }}
       >
         <iframe
@@ -55,4 +55,3 @@ export default function PdfViewerPage() {
     </div>
   );
 }
-
