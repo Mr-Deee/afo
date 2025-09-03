@@ -20,6 +20,9 @@ export default function PdfViewerPage() {
     );
   }
 
+  // ✅ Add fit-to-width param to PDF
+  const pdfSrc = file.includes("#") ? file : `${file}#view=fitH`;
+
   return (
     <div
       style={{
@@ -35,17 +38,16 @@ export default function PdfViewerPage() {
           flexGrow: 1,
           width: "100%",
           height: "100%",
-          overflow: "auto", // ✅ allow scrolling
-          WebkitOverflowScrolling: "touch", // ✅ smooth scroll on iOS
+          overflow: "auto", // allow scrolling if needed
+          WebkitOverflowScrolling: "touch",
         }}
       >
         <iframe
-          src={file}
+          src={pdfSrc}
           style={{
             width: "100%",
             height: "100%",
             border: "none",
-            minWidth: "600px", // ✅ wider base so mobile can scroll sideways + zoom
           }}
           title="PDF Viewer"
         />
@@ -53,3 +55,4 @@ export default function PdfViewerPage() {
     </div>
   );
 }
+
