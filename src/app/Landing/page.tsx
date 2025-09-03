@@ -68,9 +68,9 @@ export default function LandingPage() {
   };
 
   const services = [
-    { title: "Program Outline", desc: ".", pdf: "/pdfs/PO.pdf" },
+    { title: "Program Outline", desc: "", pdf: "/pdfs/PO.pdf" },
     { title: "BioGraphy", desc: "" },
-    { title: "Location", desc: "." },
+    { title: "Location", desc: "" },
   ];
 
   const [tributes, setTributes] = useState<Tribute[]>([]);
