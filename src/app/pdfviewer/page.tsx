@@ -69,44 +69,13 @@
 
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState } from "react";
 import { useSearchParams } from "next/navigation";
 
 function PdfViewerInner() {
   const searchParams = useSearchParams();
-  const [loading, setLoading] = useState(true);
-
   let file = searchParams.get("file");
-
-  // ✅ Hooks always run, but do nothing if file is missing
-  useEffect(() => {
-    if (!file) return;
-
-    let normalizedFile = file;
-    if (!normalizedFile.startsWith("http") && !normalizedFile.startsWith("/")) {
-      normalizedFile = "/" + normalizedFile;
-    }
-
-    const preload = document.createElement("link");
-    preload.rel = "preload";
-    preload.as = "document";
-    preload.href = normalizedFile;
-    preload.crossOrigin = "anonymous";
-
-    const prefetch = document.createElement("link");
-    prefetch.rel = "prefetch";
-    prefetch.as = "document";
-    prefetch.href = normalizedFile;
-    prefetch.crossOrigin = "anonymous";
-
-    document.head.appendChild(preload);
-    document.head.appendChild(prefetch);
-
-    return () => {
-      document.head.removeChild(preload);
-      document.head.removeChild(prefetch);
-    };
-  }, [file]);
+  const [loading, setLoading] = useState(true);
 
   if (!file) {
     return (
@@ -123,53 +92,65 @@ function PdfViewerInner() {
   return (
     <div className="pdf-container">
       {loading && (
-        <div className="loader-overlay">
+        <div className="spinner-overlay">
           <div className="spinner"></div>
+          <p>Loading PDF…</p>
         </div>
       )}
-      <iframe
-        src={file + "#zoom=page-fit"}
+      <embed
+        src={file}
+        type="application/pdf"
         className="pdf-embed"
-        onLoad={() => setLoading(false)} // hides loader early
+        onLoad={() => setLoading(false)}
       />
       <style jsx>{`
         .pdf-container {
           position: relative;
           width: 100%;
           height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           background: #f5f5f5;
         }
         .pdf-embed {
           width: 100%;
           height: 100%;
-          border: none;
+          object-fit: contain;
         }
-        .loader-overlay {
+        .spinner-overlay {
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
-          background: #fff;
+          background: rgba(255, 255, 255, 0.8);
           z-index: 10;
         }
         .spinner {
-          width: 50px;
-          height: 50px;
-          border: 6px solid #ddd;
-          border-top: 6px solid #0070f3;
+          border: 4px solid #ddd;
+          border-top: 4px solid #333;
           border-radius: 50%;
-          animation: spin 0.6s linear infinite;
+          width: 40px;
+          height: 40px;
+          animation: spin 1s linear infinite;
         }
         @keyframes spin {
-          to { transform: rotate(360deg); }
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
         @media (max-width: 768px) {
           .pdf-container {
             height: 100dvh;
           }
           .pdf-embed {
+            width: 100%;
             height: 100%;
+            object-fit: contain;
           }
         }
       `}</style>
@@ -183,20 +164,6 @@ export default function PdfViewerPage() {
       fallback={
         <div style={{ textAlign: "center", padding: "2rem" }}>
           <div className="spinner"></div>
-          <style jsx>{`
-            .spinner {
-              width: 40px;
-              height: 40px;
-              border: 5px solid #ccc;
-              border-top: 5px solid #0070f3;
-              border-radius: 50%;
-              animation: spin 0.6s linear infinite;
-              margin: 0 auto;
-            }
-            @keyframes spin {
-              to { transform: rotate(360deg); }
-            }
-          `}</style>
           <p>Loading PDF…</p>
         </div>
       }
@@ -205,5 +172,3 @@ export default function PdfViewerPage() {
     </Suspense>
   );
 }
-
-
