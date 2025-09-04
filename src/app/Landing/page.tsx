@@ -60,7 +60,7 @@ export default function LandingPage() {
   const router = useRouter();
 
   const navLinks = [
-    { href: "#", label: "Memories" },
+    // { href: "#", label: "Memories" },
     { href: "#work", label: "Tributes" },
     { href: "#memories", label: "Memories" },
   ];
