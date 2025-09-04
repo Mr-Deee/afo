@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 
 function PdfViewerInner() {
   const searchParams = useSearchParams();
-  const file = searchParams.get("file");
+  let file = searchParams.get("file");
 
   if (!file) {
     return (
@@ -15,16 +15,39 @@ function PdfViewerInner() {
     );
   }
 
+  if (!file.startsWith("http") && !file.startsWith("/")) {
+    file = "/" + file;
+  }
+
   return (
-    <div style={{ height: "100vh", width: "100%" }}>
-      <iframe
-        src={file}
-        style={{
-          width: "100%",
-          height: "100%",
-          border: "none",
-        }}
-      />
+    <div className="pdf-container">
+      <embed src={file} type="application/pdf" className="pdf-embed" />
+      <style jsx>{`
+        .pdf-container {
+          position: relative;
+          width: 100%;
+          height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          background: #f5f5f5;
+        }
+        .pdf-embed {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+        @media (max-width: 768px) {
+          .pdf-container {
+            height: 100dvh;
+          }
+          .pdf-embed {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
+        }
+      `}</style>
     </div>
   );
 }
