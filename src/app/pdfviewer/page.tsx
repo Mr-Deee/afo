@@ -1,74 +1,44 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
-import dynamic from "next/dynamic";
+import { Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import styles from "./PdfViewerPage.module.css";
 
-const Document = dynamic(() => import("react-pdf").then((m) => m.Document), { ssr: false });
-const Page = dynamic(() => import("react-pdf").then((m) => m.Page), { ssr: false });
+function PdfViewerInner() {
+  const searchParams = useSearchParams();
+  const file = searchParams.get("file");
 
-function useContainerWidth() {
-  const ref = useRef<HTMLDivElement | null>(null);
-  const [width, setWidth] = useState(0);
+  if (!file) {
+    return (
+      <p style={{ textAlign: "center", padding: "2rem" }}>
+        No PDF selected
+      </p>
+    );
+  }
 
-  useEffect(() => {
-    if (!ref.current) return;
-    const el = ref.current;
-    const ro = new ResizeObserver((entries) => {
-      for (const e of entries) setWidth(e.contentRect.width);
-    });
-    ro.observe(el);
-    setWidth(el.clientWidth);
-    return () => ro.disconnect();
-  }, []);
-
-  return { ref, width };
+  return (
+    <div style={{ height: "100vh", width: "100%" }}>
+      <iframe
+        src={file}
+        style={{
+          width: "100%",
+          height: "100%",
+          border: "none",
+        }}
+      />
+    </div>
+  );
 }
 
 export default function PdfViewerPage() {
-  const searchParams = useSearchParams();
-  const file = searchParams.get("file") || "/pdfs/sample.pdf";
-
-  const { ref, width } = useContainerWidth();
-  const [numPages, setNumPages] = useState<number>(0);
-
-  useEffect(() => {
-    (async () => {
-      const { pdfjs } = await import("react-pdf");
-      pdfjs.GlobalWorkerOptions.workerSrc =
-        `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-    })();
-  }, []);
-
   return (
-    <div className={styles.viewerContainer}>
-      <div className={styles.inner}>
-        <div className={styles.toolbar}>
-          <span className={styles.filepath}>{file}</span>
-        </div>
-        <div ref={ref} className={styles.canvasWrap}>
-          {width > 0 && (
-            <Document
-              file={file}
-              onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-              onLoadError={(err) => console.error("PDF load error:", err)}
-              loading={<div className={styles.message}>Loading PDF…</div>}
-              error={<div className={styles.message}>Failed to load PDF.</div>}
-            >
-              {Array.from(new Array(numPages), (_, index) => (
-                <Page
-                  key={`page_${index + 1}`}
-                  pageNumber={index + 1}
-                  width={Math.min(width, 1000)}
-                  renderTextLayer={false}
-                  renderAnnotationLayer={false}
-                />
-              ))}
-            </Document>
-          )}
-        </div>
-      </div>
-    </div>
+    <Suspense
+      fallback={
+        <p style={{ textAlign: "center", padding: "2rem" }}>
+          Loading PDF…
+        </p>
+      }
+    >
+      <PdfViewerInner />
+    </Suspense>
   );
 }
