@@ -66,7 +66,6 @@
 //   );
 // }
 
-
 "use client";
 
 import { Suspense, useState } from "react";
@@ -91,8 +90,9 @@ function PdfViewerInner() {
 
   return (
     <div className="pdf-container">
+      {/* Spinner in background */}
       {loading && (
-        <div className="spinner-overlay">
+        <div className="spinner-background">
           <div className="spinner"></div>
           <p>Loading PDF…</p>
         </div>
@@ -117,8 +117,10 @@ function PdfViewerInner() {
           width: 100%;
           height: 100%;
           object-fit: contain;
+          position: relative;
+          z-index: 2; /* Always above spinner background */
         }
-        .spinner-overlay {
+        .spinner-background {
           position: absolute;
           top: 0;
           left: 0;
@@ -128,8 +130,8 @@ function PdfViewerInner() {
           flex-direction: column;
           justify-content: center;
           align-items: center;
-          background: rgba(255, 255, 255, 0.8);
-          z-index: 10;
+          z-index: 1; /* Behind the PDF */
+          opacity: 0.4; /* faint in background */
         }
         .spinner {
           border: 4px solid #ddd;
