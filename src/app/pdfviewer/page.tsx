@@ -10,34 +10,31 @@ function PdfViewerInner() {
   const [isMobile, setIsMobile] = useState(false);
 
   useEffect(() => {
-    const checkIsMobile = () => {
-      setIsMobile(window.innerWidth <= 768);
-    };
-    
+    const checkIsMobile = () => setIsMobile(window.innerWidth <= 768);
     checkIsMobile();
-    window.addEventListener('resize', checkIsMobile);
-    
-    return () => {
-      window.removeEventListener('resize', checkIsMobile);
-    };
+    window.addEventListener("resize", checkIsMobile);
+    return () => window.removeEventListener("resize", checkIsMobile);
   }, []);
 
   if (!file) {
-    return (
-      <p className={styles.message}>
-        No PDF selected. Please choose a PDF file to view.
-      </p>
-    );
+    return <p className={styles.message}>No PDF selected. Please choose a PDF file to view.</p>;
   }
+
+  // Append PDF fragment for auto-fit across browsers
+  const pdfUrl = `${file}#zoom=page-fit&view=FitH&page=1`;
 
   return (
     <div className={styles.viewerContainer}>
       <div className={styles.pdfWrapper}>
         <iframe
-          src={`${file}#view=fitH`}
+          src={pdfUrl}
           className={styles.viewerFrame}
           title="PDF Viewer"
-          style={{ height: isMobile ? '80vh' : '100%' }}
+          style={{
+            width: "100%",
+            height: isMobile ? "100vh" : "100%",
+            border: "none",
+          }}
         />
       </div>
     </div>
