@@ -89,7 +89,7 @@ function PdfViewerInner() {
     file = "/" + file;
   }
 
-  // Add cache-buster for fast reloads
+  // Add cache-buster for fresh load each time
   const src = `${file}#zoom=page-fit&${Date.now()}`;
 
   return (
@@ -102,7 +102,7 @@ function PdfViewerInner() {
       )}
       <iframe
         src={src}
-        className="pdf-embed"
+        className="pdf-frame"
         onLoad={() => setLoading(false)}
         title="PDF Viewer"
       />
@@ -111,12 +111,12 @@ function PdfViewerInner() {
           position: relative;
           width: 100%;
           height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
           background: #f5f5f5;
+          display: flex;
+          flex-direction: column;
         }
-        .pdf-embed {
+        .pdf-frame {
+          flex: 1;
           width: 100%;
           height: 100%;
           border: none;
@@ -148,7 +148,7 @@ function PdfViewerInner() {
           .pdf-container {
             height: 100dvh;
           }
-          .pdf-embed {
+          .pdf-frame {
             width: 100%;
             height: 100%;
           }
