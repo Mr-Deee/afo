@@ -23,31 +23,28 @@ function PdfViewerInner() {
     file = "/" + file;
   }
 
-  // Cache-busting version (bump this when you update the PDF)
-  const versionedFile = `${file}?v=1.0.0`;
-
   return (
     <>
       {/* Preload PDF so browser fetches it ASAP */}
       <Head>
         <link
           rel="preload"
-          href={versionedFile}
+          href={file}
           as="document"
           type="application/pdf"
         />
       </Head>
 
       <div className="pdf-container">
-        {/* Loader circle */}
+        {/* Loader overlay */}
         {loading && (
           <div className="loader-overlay">
-            <div className="loading-circle"></div>
+            <div className="circle-loader"></div>
           </div>
         )}
 
         <iframe
-          src={versionedFile}
+          src={file}
           className="pdf-embed"
           onLoad={() => setLoading(false)}
         />
@@ -76,17 +73,17 @@ function PdfViewerInner() {
             left: 0;
             width: 100%;
             height: 100%;
+            background: #f5f5f5;
             display: flex;
             justify-content: center;
             align-items: center;
-            background: #f5f5f5;
             z-index: 10;
           }
 
-          .loading-circle {
+          .circle-loader {
             width: 60px;
             height: 60px;
-            border: 6px solid #ccc;
+            border: 6px solid #ddd;
             border-top: 6px solid #0070f3;
             border-radius: 50%;
             animation: spin 1s linear infinite;
