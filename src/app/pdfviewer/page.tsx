@@ -65,6 +65,8 @@
 //     </Suspense>
 //   );
 // }
+
+
 "use client";
 
 import { Suspense, useState } from "react";
@@ -83,12 +85,11 @@ function PdfViewerInner() {
     );
   }
 
-  // Normalize file path
   if (!file.startsWith("http") && !file.startsWith("/")) {
     file = "/" + file;
   }
 
-  // Add cache-buster so it refreshes each time
+  // Add cache-buster for fast reloads
   const src = `${file}#zoom=page-fit&${Date.now()}`;
 
   return (
@@ -101,7 +102,7 @@ function PdfViewerInner() {
       )}
       <iframe
         src={src}
-        className="pdf-frame"
+        className="pdf-embed"
         onLoad={() => setLoading(false)}
         title="PDF Viewer"
       />
@@ -110,27 +111,25 @@ function PdfViewerInner() {
           position: relative;
           width: 100%;
           height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           background: #f5f5f5;
-          overflow: hidden;
         }
-        .pdf-frame {
+        .pdf-embed {
           width: 100%;
           height: 100%;
           border: none;
         }
         .loading-overlay {
           position: absolute;
-          top: 0;
-          left: 0;
-          width: 100%;
-          height: 100%;
+          inset: 0;
           background: #f5f5f5;
           display: flex;
           flex-direction: column;
           align-items: center;
           justify-content: center;
           z-index: 10;
-          transition: opacity 0.3s ease;
         }
         .spinner {
           border: 6px solid #ddd;
@@ -148,6 +147,10 @@ function PdfViewerInner() {
         @media (max-width: 768px) {
           .pdf-container {
             height: 100dvh;
+          }
+          .pdf-embed {
+            width: 100%;
+            height: 100%;
           }
         }
       `}</style>
