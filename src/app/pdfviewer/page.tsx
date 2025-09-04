@@ -80,20 +80,14 @@ function PdfViewerInner() {
 
   let file = searchParams.get("file");
 
-  if (!file) {
-    return (
-      <p style={{ textAlign: "center", padding: "2rem" }}>
-        No PDF selected
-      </p>
-    );
-  }
-
-  if (!file.startsWith("http") && !file.startsWith("/")) {
-    file = "/" + file;
-  }
-
-  // Preload PDF
+  // ✅ Preload only if file exists
   useEffect(() => {
+    if (!file) return;
+
+    if (!file.startsWith("http") && !file.startsWith("/")) {
+      file = "/" + file;
+    }
+
     const link = document.createElement("link");
     link.rel = "preload";
     link.href = file;
@@ -107,6 +101,18 @@ function PdfViewerInner() {
       document.head.removeChild(link);
     };
   }, [file]);
+
+  if (!file) {
+    return (
+      <p style={{ textAlign: "center", padding: "2rem" }}>
+        No PDF selected
+      </p>
+    );
+  }
+
+  if (!file.startsWith("http") && !file.startsWith("/")) {
+    file = "/" + file;
+  }
 
   return (
     <div className="pdf-container">
