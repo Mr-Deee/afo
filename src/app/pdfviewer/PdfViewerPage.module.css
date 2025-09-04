@@ -1,84 +1,44 @@
-/* Full-bleed, responsive container that respects mobile browser UI + safe areas */
-
-
-.pdfContainer {
+.viewerContainer {
+  position: relative;
   width: 100%;
-  height: 100dvh; /* better than 100vh for mobile */
+  height: 100dvh; /* ✅ mobile-safe full height */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #f8f9fa; /* subtle background */
   overflow: hidden;
 }
 
-.pdfFrame {
+.viewerFrame {
   width: 100%;
   height: 100%;
   border: none;
+  object-fit: contain; /* keep aspect ratio when resizing */
 }
 
-/* Mobile tweaks */
-@media (max-width: 640px) {
-  .pdfContainer {
-    padding: calc(env(safe-area-inset-top) + 8px)
-             calc(env(safe-area-inset-right) + 8px)
-             calc(env(safe-area-inset-bottom) + 8px)
-             calc(env(safe-area-inset-left) + 8px);
+/* Text messages (fallback or no file) */
+.message {
+  text-align: center;
+  padding: 2rem;
+  font-size: 1rem;
+  color: #555;
+}
+
+/* ✅ Responsive tweaks */
+@media (max-width: 768px) {
+  .viewerContainer {
+    height: 100dvh;
   }
 
-  .pdfFrame {
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
-  }
-}
-
-
-
-
-
-
-.pdfContainer {
-  /* Use dynamic viewport height to avoid the mobile URL bar jump */
-  height: 100dvh;
-  width: 100%;
-  /* Nice subtle background so the white PDF edges aren’t floating */
-  background: radial-gradient(circle at 20% 20%, rgba(0,0,0,0.06), transparent 40%),
-              radial-gradient(circle at 80% 0%, rgba(0,0,0,0.04), transparent 45%),
-              #f4f6f8;
-  padding: env(safe-area-inset-top) env(safe-area-inset-right)
-           env(safe-area-inset-bottom) env(safe-area-inset-left);
-  overflow: hidden;
-}
-
-.pdfFrame {
-  width: 100%;
-  height: 100%;
-  border: 0;
-  display: block;
-  /* Prevent accidental text selection inside embedded viewers on mobile */
-  -webkit-user-select: none;
-  user-select: none;
-  /* Smoother scrolling in iOS */
-  -webkit-overflow-scrolling: touch;
-}
-
-/* Small screens: allow a little breathing room around the frame */
-@media (max-width: 640px) {
-  .pdfContainer {
-    padding: calc(env(safe-area-inset-top) + 8px)
-             calc(env(safe-area-inset-right) + 8px)
-             calc(env(safe-area-inset-bottom) + 8px)
-             calc(env(safe-area-inset-left) + 8px);
-  }
-  .pdfFrame {
-    border-radius: 12px;
-    box-shadow: 0 8px 30px rgba(0,0,0,0.08);
+  .message {
+    font-size: 0.9rem;
+    padding: 1.5rem;
   }
 }
 
-/* Landscape phones/tablets: keep it neat */
-@media (orientation: landscape) and (max-height: 500px) {
-  .pdfContainer {
-    padding: 0;
-  }
-  .pdfFrame {
-    border-radius: 0;
-    box-shadow: none;
+@media (max-width: 480px) {
+  .message {
+    font-size: 0.85rem;
+    padding: 1rem;
   }
 }
