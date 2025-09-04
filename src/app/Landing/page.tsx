@@ -4,6 +4,8 @@ import { useEffect, useState } from "react";
 import { ref, onValue } from "firebase/database";
 import { useRouter } from "next/navigation"; 
 import { motion, AnimatePresence } from "framer-motion";
+import Image from "next/image";
+
 import { db } from "@/firebase";
 import styles from "./Home.module.css";
 
@@ -58,9 +60,9 @@ export default function LandingPage() {
   const router = useRouter();
 
   const navLinks = [
-    { href: "#services", label: "Memories" },
+    { href: "#", label: "Memories" },
     { href: "#work", label: "Tributes" },
-    { href: "#about", label: "" },
+    { href: "#memories", label: "Memories" },
   ];
 
   const gototribute = () => {
@@ -142,7 +144,13 @@ export default function LandingPage() {
     <main className={styles.main}>
       {/* Navbar */}
       <header className={styles.navbar}>
-        <h1 className={styles.logo}>.</h1>
+        <h1 className={styles.logo}><Image
+        src="/images/logo.png" // put your logo inside public/logo.png
+        alt="Your Logo"
+        width={100}     // adjust size
+        height={70}
+        priority        // ensures it loads fast
+      /></h1>
         <nav className={styles.navLinks} aria-label="Main Navigation">
           {navLinks.map((link) => (
             <a key={link.href} href={link.href}>
