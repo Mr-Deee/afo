@@ -31,7 +31,7 @@ export default function PdfViewerPage() {
   const file = searchParams.get("file") || "/pdfs/sample.pdf";
 
   const { ref, width } = useContainerWidth();
-  const [numPages, setNumPages] = useState<number>();
+  const [numPages, setNumPages] = useState<number>(0);
 
   useEffect(() => {
     (async () => {
@@ -47,7 +47,6 @@ export default function PdfViewerPage() {
         <div className={styles.toolbar}>
           <span className={styles.filepath}>{file}</span>
         </div>
-
         <div ref={ref} className={styles.canvasWrap}>
           {width > 0 && (
             <Document
@@ -57,11 +56,10 @@ export default function PdfViewerPage() {
               loading={<div className={styles.message}>Loading PDF…</div>}
               error={<div className={styles.message}>Failed to load PDF.</div>}
             >
-              {/* Render ALL pages in order */}
-              {Array.from(new Array(numPages), (_, i) => (
+              {Array.from(new Array(numPages), (_, index) => (
                 <Page
-                  key={`page_${i + 1}`}
-                  pageNumber={i + 1}
+                  key={`page_${index + 1}`}
+                  pageNumber={index + 1}
                   width={Math.min(width, 1000)}
                   renderTextLayer={false}
                   renderAnnotationLayer={false}
