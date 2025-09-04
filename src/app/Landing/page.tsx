@@ -69,7 +69,7 @@ export default function LandingPage() {
 
   const services = [
     { title: "Program Outline", desc: "", pdf: "/pdfs/PO.pdf" },
-    { title: "BioGraphy", desc: "" },
+    { title: "EcoMagazine", desc: "",pdf: "/pdfs/EM.pdf" },
     { title: "Location", desc: "" },
   ];
 
@@ -150,9 +150,9 @@ export default function LandingPage() {
             </a>
           ))}
         </nav>
-        <button className={styles.primaryButton} aria-label="Donate">
+        {/* <button className={styles.primaryButton} aria-label="Donate">
           Donate
-        </button>
+        </button> */}
       </header>
 
       {/* Hero Section */}
