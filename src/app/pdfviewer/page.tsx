@@ -79,6 +79,36 @@ function PdfViewerInner() {
 
   let file = searchParams.get("file");
 
+  // ✅ Hooks always run, but do nothing if file is missing
+  useEffect(() => {
+    if (!file) return;
+
+    let normalizedFile = file;
+    if (!normalizedFile.startsWith("http") && !normalizedFile.startsWith("/")) {
+      normalizedFile = "/" + normalizedFile;
+    }
+
+    const preload = document.createElement("link");
+    preload.rel = "preload";
+    preload.as = "document";
+    preload.href = normalizedFile;
+    preload.crossOrigin = "anonymous";
+
+    const prefetch = document.createElement("link");
+    prefetch.rel = "prefetch";
+    prefetch.as = "document";
+    prefetch.href = normalizedFile;
+    prefetch.crossOrigin = "anonymous";
+
+    document.head.appendChild(preload);
+    document.head.appendChild(prefetch);
+
+    return () => {
+      document.head.removeChild(preload);
+      document.head.removeChild(prefetch);
+    };
+  }, [file]);
+
   if (!file) {
     return (
       <p style={{ textAlign: "center", padding: "2rem" }}>
@@ -91,29 +121,6 @@ function PdfViewerInner() {
     file = "/" + file;
   }
 
-  // ⚡ Preload + prefetch for faster opens
-  useEffect(() => {
-    const preload = document.createElement("link");
-    preload.rel = "preload";
-    preload.as = "document";
-    preload.href = file;
-    preload.crossOrigin = "anonymous";
-
-    const prefetch = document.createElement("link");
-    prefetch.rel = "prefetch";
-    prefetch.as = "document";
-    prefetch.href = file;
-    prefetch.crossOrigin = "anonymous";
-
-    document.head.appendChild(preload);
-    document.head.appendChild(prefetch);
-
-    return () => {
-      document.head.removeChild(preload);
-      document.head.removeChild(prefetch);
-    };
-  }, [file]);
-
   return (
     <div className="pdf-container">
       {loading && (
@@ -124,7 +131,7 @@ function PdfViewerInner() {
       <iframe
         src={file + "#zoom=page-fit"}
         className="pdf-embed"
-        onLoad={() => setLoading(false)} // hides loader as soon as PDF viewer is ready
+        onLoad={() => setLoading(false)} // hides loader early
       />
       <style jsx>{`
         .pdf-container {
@@ -199,3 +206,4 @@ export default function PdfViewerPage() {
     </Suspense>
   );
 }
+
