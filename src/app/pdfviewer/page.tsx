@@ -76,8 +76,31 @@ import { useSearchParams } from "next/navigation";
 function PdfViewerInner() {
   const searchParams = useSearchParams();
   const [loading, setLoading] = useState(true);
+  const [preloaded, setPreloaded] = useState(false);
 
   let file = searchParams.get("file");
+
+  // ✅ Preload only if file exists
+  useEffect(() => {
+    if (!file) return;
+
+    if (!file.startsWith("http") && !file.startsWith("/")) {
+      file = "/" + file;
+    }
+
+    const link = document.createElement("link");
+    link.rel = "preload";
+    link.href = file;
+    link.as = "fetch";
+    link.crossOrigin = "anonymous";
+
+    link.onload = () => setPreloaded(true);
+    document.head.appendChild(link);
+
+    return () => {
+      document.head.removeChild(link);
+    };
+  }, [file]);
 
   if (!file) {
     return (
@@ -91,79 +114,66 @@ function PdfViewerInner() {
     file = "/" + file;
   }
 
-  // ⚡ Preload + prefetch for faster opens
-  useEffect(() => {
-    const preload = document.createElement("link");
-    preload.rel = "preload";
-    preload.as = "document";
-    preload.href = file;
-    preload.crossOrigin = "anonymous";
-
-    const prefetch = document.createElement("link");
-    prefetch.rel = "prefetch";
-    prefetch.as = "document";
-    prefetch.href = file;
-    prefetch.crossOrigin = "anonymous";
-
-    document.head.appendChild(preload);
-    document.head.appendChild(prefetch);
-
-    return () => {
-      document.head.removeChild(preload);
-      document.head.removeChild(prefetch);
-    };
-  }, [file]);
-
   return (
     <div className="pdf-container">
-      {loading && (
+      {(loading || !preloaded) && (
         <div className="loader-overlay">
           <div className="spinner"></div>
         </div>
       )}
-      <iframe
-        src={file + "#zoom=page-fit"}
+      <embed
+        src={file}
+        type="application/pdf"
         className="pdf-embed"
-        onLoad={() => setLoading(false)} // hides loader as soon as PDF viewer is ready
+        onLoad={() => setLoading(false)}
       />
       <style jsx>{`
         .pdf-container {
           position: relative;
           width: 100%;
           height: 100vh;
+          display: flex;
+          justify-content: center;
+          align-items: center;
           background: #f5f5f5;
         }
         .pdf-embed {
           width: 100%;
           height: 100%;
-          border: none;
+          object-fit: contain;
         }
         .loader-overlay {
           position: absolute;
-          inset: 0;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
           display: flex;
           justify-content: center;
           align-items: center;
-          background: #fff;
+          background: rgba(255, 255, 255, 0.8);
           z-index: 10;
         }
         .spinner {
           width: 50px;
           height: 50px;
-          border: 6px solid #ddd;
+          border: 6px solid #ccc;
           border-top: 6px solid #0070f3;
           border-radius: 50%;
-          animation: spin 0.6s linear infinite;
+          animation: spin 0.8s linear infinite;
         }
         @keyframes spin {
-          to { transform: rotate(360deg); }
+          0% { transform: rotate(0deg); }
+          100% { transform: rotate(360deg); }
         }
         @media (max-width: 768px) {
           .pdf-container {
             height: 100dvh;
           }
           .pdf-embed {
+            width: 100%;
             height: 100%;
+            object-fit: contain;
           }
         }
       `}</style>
@@ -184,11 +194,12 @@ export default function PdfViewerPage() {
               border: 5px solid #ccc;
               border-top: 5px solid #0070f3;
               border-radius: 50%;
-              animation: spin 0.6s linear infinite;
+              animation: spin 0.8s linear infinite;
               margin: 0 auto;
             }
             @keyframes spin {
-              to { transform: rotate(360deg); }
+              0% { transform: rotate(0deg); }
+              100% { transform: rotate(360deg); }
             }
           `}</style>
           <p>Loading PDF…</p>
