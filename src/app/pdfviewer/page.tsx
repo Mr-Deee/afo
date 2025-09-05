@@ -70,39 +70,35 @@
 
 "use client";
 
-import { Suspense, useEffect, useState } from "react";
+import { Suspense, useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 
 function PdfViewerInner() {
   const searchParams = useSearchParams();
+  const fileParam = searchParams.get("file");
   const [loading, setLoading] = useState(true);
-  const [preloaded, setPreloaded] = useState(false);
+  const [viewerUrl, setViewerUrl] = useState("");
 
-  let file = searchParams.get("file");
-
-  // ✅ Preload only if file exists
   useEffect(() => {
-    if (!file) return;
+    if (!fileParam) return;
 
+    let file = fileParam;
     if (!file.startsWith("http") && !file.startsWith("/")) {
       file = "/" + file;
     }
 
-    const link = document.createElement("link");
-    link.rel = "preload";
-    link.href = file;
-    link.as = "fetch";
-    link.crossOrigin = "anonymous";
+    // Full absolute URL for Google Docs Viewer
+    const fullUrl =
+      file.startsWith("http") ? file : window.location.origin + file;
 
-    link.onload = () => setPreloaded(true);
-    document.head.appendChild(link);
+    setViewerUrl(
+      `https://docs.google.com/gview?embedded=true&url=${encodeURIComponent(
+        fullUrl
+      )}`
+    );
+  }, [fileParam]);
 
-    return () => {
-      document.head.removeChild(link);
-    };
-  }, [file]);
-
-  if (!file) {
+  if (!fileParam) {
     return (
       <p style={{ textAlign: "center", padding: "2rem" }}>
         No PDF selected
@@ -110,70 +106,72 @@ function PdfViewerInner() {
     );
   }
 
-  if (!file.startsWith("http") && !file.startsWith("/")) {
-    file = "/" + file;
-  }
-
   return (
     <div className="pdf-container">
-      {(loading || !preloaded) && (
-        <div className="loader-overlay">
+      {loading && (
+        <div className="spinner-overlay">
           <div className="spinner"></div>
+          <p>Loading PDF…</p>
         </div>
       )}
-      <embed
-        src={file}
-        type="application/pdf"
-        className="pdf-embed"
-        onLoad={() => setLoading(false)}
-      />
+
+      {viewerUrl && (
+        <iframe
+          src={viewerUrl}
+          className="pdf-iframe"
+          onLoad={() => setLoading(false)}
+          allow="fullscreen"
+        />
+      )}
+
       <style jsx>{`
         .pdf-container {
           position: relative;
           width: 100%;
-          height: 100vh;
-          display: flex;
-          justify-content: center;
-          align-items: center;
+          height: 100dvh; /* safer for iOS Safari than 100vh */
           background: #f5f5f5;
+          overflow: hidden;
         }
-        .pdf-embed {
+
+        .pdf-iframe {
           width: 100%;
           height: 100%;
-          object-fit: contain;
+          border: none;
+          display: block;
         }
-        .loader-overlay {
+
+        .spinner-overlay {
           position: absolute;
           top: 0;
           left: 0;
-          right: 0;
-          bottom: 0;
+          width: 100%;
+          height: 100%;
           display: flex;
+          flex-direction: column;
           justify-content: center;
           align-items: center;
           background: rgba(255, 255, 255, 0.8);
           z-index: 10;
         }
+
         .spinner {
-          width: 50px;
-          height: 50px;
-          border: 6px solid #ccc;
-          border-top: 6px solid #0070f3;
+          border: 4px solid #ddd;
+          border-top: 4px solid #333;
           border-radius: 50%;
-          animation: spin 0.8s linear infinite;
+          width: 45px;
+          height: 45px;
+          animation: spin 1s linear infinite;
+          margin-bottom: 1rem;
         }
+
         @keyframes spin {
           0% { transform: rotate(0deg); }
           100% { transform: rotate(360deg); }
         }
+
         @media (max-width: 768px) {
           .pdf-container {
-            height: 100dvh;
-          }
-          .pdf-embed {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
+            height: 100dvh; /* dynamic height ensures no cutoff on iOS Safari */
           }
         }
       `}</style>
@@ -185,23 +183,23 @@ export default function PdfViewerPage() {
   return (
     <Suspense
       fallback={
-        <div style={{ textAlign: "center", padding: "2rem" }}>
-          <div className="spinner"></div>
-          <style jsx>{`
-            .spinner {
-              width: 40px;
-              height: 40px;
-              border: 5px solid #ccc;
-              border-top: 5px solid #0070f3;
-              border-radius: 50%;
-              animation: spin 0.8s linear infinite;
-              margin: 0 auto;
-            }
-            @keyframes spin {
-              0% { transform: rotate(0deg); }
-              100% { transform: rotate(360deg); }
-            }
-          `}</style>
+        <div
+          style={{
+            textAlign: "center",
+            padding: "2rem",
+          }}
+        >
+          <div
+            style={{
+              border: "4px solid #ddd",
+              borderTop: "4px solid #333",
+              borderRadius: "50%",
+              width: "40px",
+              height: "40px",
+              animation: "spin 1s linear infinite",
+              margin: "auto",
+            }}
+          ></div>
           <p>Loading PDF…</p>
         </div>
       }
