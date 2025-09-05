@@ -70,11 +70,39 @@ export default function LandingPage() {
   };
 
   const services = [
-    { title: "Program Outline", desc: "", pdf: "/pdfs/PO.pdf" },
-    { title: "EcoMagazine", desc: "",pdf: "/pdfs/EM.pdf" },
     { title: "Brochure", desc: "",pdf: "/pdfs/BR.pdf" },
+    { title: "Program Outline", desc: "", pdf: "/pdfs/PO.pdf" },
+    { title: "Hymn", desc: "",pdf: "/pdfs/HYB.pdf" },
+    { title: "EcoMagazine", desc: "",pdf: "/pdfs/EM.pdf" },
+
   ];
 
+
+
+    // ⬇️ PDF Preloading + Cache
+    useEffect(() => {
+      if ("caches" in window) {
+        caches.open("pdf-cache").then((cache) => {
+          services.forEach(({ pdf }) => {
+            if (pdf) {
+              fetch(pdf).then((response) => {
+                if (response.ok) {
+                  cache.put(pdf, response.clone());
+                }
+              }).catch(() => {
+                console.warn(`Failed to preload ${pdf}`);
+              });
+            }
+          });
+        });
+      } else {
+        // Fallback: just fetch into memory
+        services.forEach(({ pdf }) => {
+          if (pdf) fetch(pdf).catch(() => {});
+        });
+      }
+    }, []);
+  
   const [tributes, setTributes] = useState<Tribute[]>([]);
   const [index, setIndex] = useState(0);
 
