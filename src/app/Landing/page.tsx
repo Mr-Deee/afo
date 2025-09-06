@@ -71,8 +71,8 @@ export default function LandingPage() {
 
   const services = [
     { title: "Brochure", desc: "",pdf: "/pdfs/BR.pdf" },
-    { title: "Program Outline", desc: "", pdf: "/pdfs/PO.pdf" },
-    { title: "Hymn Book", desc: "",pdf: "/pdfs/HYB.pdf" },
+    { title: "Program Outline", desc: "", pdf: "/pdfs/SPO.pdf" },
+    { title: "Hymn Book", desc: "",pdf: "/pdfs/SHY.pdf" },
     { title: "Echo Magazine", desc: "",pdf: "/pdfs/EM.pdf" },
 
   ];
