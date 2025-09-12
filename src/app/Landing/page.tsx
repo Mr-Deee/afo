@@ -63,6 +63,7 @@ export default function LandingPage() {
     // { href: "#", label: "Memories" },
     { href: "#work", label: "Tributes" },
     { href: "#memories", label: "Memories" },
+    { href: "/funeralimages/page", label: "Funeral Photos" }, // internal route
   ];
 
   const gototribute = () => {
@@ -179,13 +180,22 @@ export default function LandingPage() {
         height={70}
         priority        // ensures it loads fast
       /></h1>
-        <nav className={styles.navLinks} aria-label="Main Navigation">
-          {navLinks.map((link) => (
-            <a key={link.href} href={link.href}>
-              {link.label}
-            </a>
-          ))}
-        </nav>
+       <nav className={styles.navLinks} aria-label="Main Navigation">
+  {navLinks.map((link) => {
+    const isExternal = link.href.startsWith("http");
+    return (
+      <a
+        key={link.href}
+        href={link.href}
+        target={isExternal ? "_blank" : undefined}
+        rel={isExternal ? "noopener noreferrer" : undefined}
+      >
+        {link.label}
+      </a>
+    );
+  })}
+</nav>
+
         {/* <button className={styles.primaryButton} aria-label="Donate">
           Donate
         </button> */}
