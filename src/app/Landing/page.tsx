@@ -63,7 +63,7 @@ export default function LandingPage() {
     // { href: "#", label: "Memories" },
     { href: "#work", label: "Tributes" },
     { href: "#memories", label: "Memories" },
-    { href: "/funeralimages/page", label: "Funeral Photos" }, // internal route
+    { href: "/funeralimages", label: "Funeral Photos" }, // ✅ internal route
   ];
 
   const gototribute = () => {
