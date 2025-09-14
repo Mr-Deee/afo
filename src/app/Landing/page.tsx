@@ -72,7 +72,7 @@ export default function LandingPage() {
 
   const services = [
     { title: "Brochure", desc: "",pdf: "/pdfs/BR.pdf" },
-    { title: "Program Outline", desc: "", pdf: "/pdfs/SPO.pdf" },
+    { title: "Funeral Photos", desc: "", link: "/funeralimages" }, // ✅ internal route instead of PDF
     { title: "Hymn Book", desc: "",pdf: "/pdfs/SHY.pdf" },
     { title: "Echo Magazine", desc: "",pdf: "/pdfs/EM.pdf" },
 
@@ -217,22 +217,24 @@ export default function LandingPage() {
           </button>
         </div>
       </section>
-
-      {/* Services */}
-      <section id="services" className={styles.services}>
-  {services.map(({ title, desc, pdf }) => (
+{/* Services */}
+<section id="services" className={styles.services}>
+  {services.map(({ title, desc, pdf, link }) => (
     <div
       key={title}
       className={styles.card}
       onClick={() => {
         if (title === "BioGraphy") {
           router.push("/biography");
+        } else if (link) {
+          router.push(link); // ✅ Navigate to route (e.g. funeral photos)
         } else if (pdf) {
           router.push(`/pdfviewer?file=${pdf}`);
         }
       }}
       style={{ cursor: "pointer" }}
     >
+    
       <h3>{title}</h3>
       <p>{desc}</p>
       <a aria-label={`Learn more about ${title}`}>View</a>
