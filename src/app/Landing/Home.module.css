@@ -207,7 +207,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 24px 32px;
+  padding: 0px 22px;
 }
 
 .logo {
@@ -249,17 +249,16 @@
 
 .hero {
   position: relative;
-  margin-top: 24px;
   text-align: center;
   display: flex;
   justify-content: center;
   align-items: center;
 
-  min-height: 69vh; /* controls how much of the image shows */
+  min-height: 90vh; /* controls how much of the image shows */
   padding: 0 20px;
 
-  background: url("/images/ROK1.jpg") center center/cover no-repeat;
-  border-radius: 0 0 32px 32px;
+  background: url("/images/Newback.jpg") center center/cover no-repeat;
+  border-radius: 0 0 82px 32px;
   overflow: hidden;
 }
 
@@ -267,7 +266,7 @@
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(0, 0, 0, 0.6); /* dark overlay */
+  background: rgba(255, 255, 255, 0); /* dark overlay */
 }
 
 .heroContent {
@@ -282,7 +281,7 @@ padding-top: 50px;
 
   font-size: 48px;
   font-weight: 300;
-  color: #fff;
+  color: #000000;
   line-height: 1.2;
 }
 
@@ -293,7 +292,7 @@ padding-top: 50px;
 
 .heroText {
   margin-top: 16px;
-  color: #aaa;
+  color: #747474;
   font-size: 18px;
 }
 
