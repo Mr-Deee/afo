@@ -74,7 +74,8 @@ export default function LandingPage() {
     { title: "Brochure", desc: "",pdf: "/pdfs/BR.pdf" },
     { title: "Funeral Photos", desc: "", link: "/funeralimages" }, // ✅ internal route instead of PDF
     { title: "Hymn Book", desc: "",pdf: "/pdfs/SHY.pdf" },
-    { title: "Echo Magazine", desc: "",pdf: "/pdfs/EM.pdf" },
+    { title: "Program Outline", desc: "",pdf: "/pdfs/PO.pdf" },
+    // { title: "Echo Magazine", desc: "",pdf: "/pdfs/EM.pdf" },
 
   ];
 
